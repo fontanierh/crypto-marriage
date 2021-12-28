@@ -3,18 +3,17 @@ const truffleAssert = require("truffle-assertions");
 const {
   time, // Time helpers
 } = require("@openzeppelin/test-helpers");
-const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
 contract("CryptoMarriage", async (accounts) => {
   let cm;
   describe("createMarriage tests", async () => {
     beforeEach(async () => {
-      cm = await deployProxy(CM);
+      cm = await CM.new();
     });
 
     it("should not allow minter to mint with a reference time in the future", async () => {
       const now = await time.latest();
-      await truffleAssert.reverts(
+      await truffleAssert.fails(
         cm.createMarriage(accounts[1], now + 10, ["abc.com", "de.fr"], [10], {
           from: accounts[0],
         }),
@@ -38,7 +37,7 @@ contract("CryptoMarriage", async (accounts) => {
 
     it("should not allow non-minter to mint, even with a reference time in the past", async () => {
       const now = await time.latest();
-      await truffleAssert.reverts(
+      await truffleAssert.fails(
         cm.createMarriage(accounts[1], now - 10, ["abc.com", "de.fr"], [10], {
           from: accounts[1],
         }),
@@ -48,7 +47,7 @@ contract("CryptoMarriage", async (accounts) => {
 
     it("should require _uris.length to equal _dayOffsets + 1", async () => {
       const now = await time.latest();
-      await truffleAssert.reverts(
+      await truffleAssert.fails(
         cm.createMarriage(accounts[1], now - 10, ["abc.com"], [10]),
         "Number of uris must be equal to number of day offsets + 1"
       );
@@ -56,7 +55,7 @@ contract("CryptoMarriage", async (accounts) => {
 
     it("should require number of _dayOffsets to be grater than 0", async () => {
       const now = await time.latest();
-      await truffleAssert.reverts(
+      await truffleAssert.fails(
         cm.createMarriage(accounts[1], now - 10, ["abc.com"], []),
         "Number of day offsets must be greater than 0"
       );
@@ -64,7 +63,7 @@ contract("CryptoMarriage", async (accounts) => {
 
     it("should require _dayOffsets to be strictly increasing", async () => {
       const now = await time.latest();
-      await truffleAssert.reverts(
+      await truffleAssert.fails(
         cm.createMarriage(
           accounts[1],
           now - 10,
@@ -73,7 +72,7 @@ contract("CryptoMarriage", async (accounts) => {
         ),
         "Day offsets must be strictly increasing"
       );
-      await truffleAssert.reverts(
+      await truffleAssert.fails(
         cm.createMarriage(
           accounts[1],
           now - 10,
@@ -87,7 +86,7 @@ contract("CryptoMarriage", async (accounts) => {
 
   describe("tokenUri tests", async () => {
     beforeEach(async () => {
-      cm = await deployProxy(CM);
+      cm = await CM.new();
     });
     it("should return the correct token uri based on the time - simple case", async () => {
       const now = await time.latest();
@@ -157,7 +156,7 @@ contract("CryptoMarriage", async (accounts) => {
 
   describe("burn tests", async () => {
     beforeEach(async () => {
-      cm = await deployProxy(CM);
+      cm = await CM.new();
     });
 
     it("should not allow non-owner to burn", async () => {
@@ -172,7 +171,7 @@ contract("CryptoMarriage", async (accounts) => {
         }
       );
       const tokenId = result.logs[0].args.tokenId;
-      await truffleAssert.reverts(cm.burn(tokenId, { from: accounts[0] }));
+      await truffleAssert.fails(cm.burn(tokenId, { from: accounts[0] }));
     });
 
     it("should allow owner to burn", async () => {
