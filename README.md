@@ -1,5 +1,7 @@
 # crypto-marriage
 
+[![CI](https://github.com/fontanierh/crypto-marriage/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/fontanierh/crypto-marriage/actions/workflows/ci.yml)
+
 crypto-marriage is a smart contract that implements the ERC721 interface and is built to represent marriages on the blockchain.
 
 The metadata of the tokens evolve over time: creating a token requires passing a marriage date (`_referenceTIme`, unix timestamp), a list of URIs ( `_uris`, each pointing to JSON files in ERC721 Metadata JSON schema) and a list of milestones (`_dayOffsets`, expressed in number of days from the `_referenceTime`).
