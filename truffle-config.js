@@ -20,7 +20,7 @@ module.exports = {
       confirmations: 1,
       timeoutBlocks: 200,
       skipDryRun: false,
-      from: "0x74Eb6F5384c91989B231e714334067591DAaE300",
+      from: "0x16aB11F8ABaCdCf47A17CE5966Ef99Db18122575",
     },
     matic_mainnet: {
       provider: () =>
@@ -31,7 +31,7 @@ module.exports = {
           addressIndex: 0,
         }),
       network_id: "137",
-      from: "0xCC6440b74a95b5506B096A79c9D7Bd070E54E9Eb",
+      from: "0xF9984Db6A3bd7044f0d22c9008ddA296C0CC5468",
     },
   },
   solc: {
@@ -47,6 +47,6 @@ module.exports = {
   },
   plugins: ["truffle-plugin-verify"],
   api_keys: {
-    polygonscan: process.env.EXPLORER_API_KEY || "",
+    etherscan: process.env.EXPLORER_API_KEY || "",
   },
 };
